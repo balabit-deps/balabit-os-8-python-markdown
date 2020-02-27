@@ -1,0 +1,9 @@
+Tests: python-markdown
+Depends: python-markdown, python-pygments, python-yaml
+
+Tests: python3-markdown
+Depends: python3-all,
+         python3-markdown,
+         python3-pygments,
+         python3-tidylib,
+         python3-yaml

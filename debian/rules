@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+
+export PYBUILD_NAME=markdown
+
+%:
+	dh $@ --with python2,python3 --buildsystem=pybuild
+
+override_dh_auto_build:
+	dh_auto_build
+ifeq ($(filter nodoc,$(DEB_BUILD_OPTIONS)),)
+	LC_ALL=C.UTF-8 mkdocs build -d build/docs
+endif
+
+override_dh_auto_install:
+	dh_auto_install
+	rm -rf debian/python3-markdown/usr/bin/
+
+ifeq ($(filter nodoc,$(DEB_BUILD_OPTIONS)),)
+override_dh_installdocs:
+	dh_installdocs
+	dh_mkdocs -T mkdocs -T libjs-underscore -T mkdocs-nature
+endif
+
+override_dh_compress:
+	dh_compress -X.txt -Xfavicon.ico -Xsearch_index.json -Xsitemap.xml
+
+.PHONY: override_dh_auto_install override_dh_compress
